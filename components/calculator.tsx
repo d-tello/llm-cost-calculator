@@ -61,7 +61,7 @@ export function Calculator() {
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
         <TabsList className="grid w-full grid-cols-2">
           <TabsTrigger value="monthly" className="cursor-pointer">Monthly</TabsTrigger>
-          <TabsTrigger value="yearly" className="cursor-pointer">Yearly</TabsTrigger>
+          <TabsTrigger value="models" className="cursor-pointer">Models</TabsTrigger>
         </TabsList>
         
         <TabsContent value="monthly" className="mt-6">
@@ -162,7 +162,7 @@ export function Calculator() {
           </div>
         </TabsContent>
         
-        <TabsContent value="yearly" className="mt-6">
+        <TabsContent value="models" className="mt-6">
           <Card>
             <CardHeader>
               <CardTitle>Model Pricing Comparison</CardTitle>

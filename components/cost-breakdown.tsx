@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { CostBreakdown as CostBreakdownType } from "@/lib/types";
 import { models } from "@/lib/models";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -11,6 +12,9 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { ChevronDown } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 interface CostBreakdownProps {
   modelId: string;
@@ -19,6 +23,7 @@ interface CostBreakdownProps {
 }
 
 export function CostBreakdown({ modelId, breakdown, historySize }: CostBreakdownProps) {
+  const [isHistoryExplanationOpen, setIsHistoryExplanationOpen] = useState(false);
   const model = models.find((m) => m.id === modelId);
 
   if (!model) {
@@ -123,98 +128,123 @@ export function CostBreakdown({ modelId, breakdown, historySize }: CostBreakdown
 
       {historySize > 0 && (
         <Card className="w-full">
-          <CardHeader>
-            <CardTitle className="text-xl">Conversation History Explained</CardTitle>
-            <CardDescription>
-              How history size of {historySize} affects token usage
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              <div className="rounded-lg border p-4">
-                <h3 className="font-medium mb-2">1st Interaction</h3>
-                <div className="space-y-2">
-                  <div className="bg-green-50 dark:bg-green-950 border border-green-200 dark:border-green-800 p-2 rounded">
-                    System Prompt
-                  </div>
-                  <div className="bg-blue-50 dark:bg-blue-950 border border-blue-200 dark:border-blue-800 p-2 rounded">
-                    User Input
-                  </div>
-                  <div className="bg-amber-50 dark:bg-amber-950 border border-amber-200 dark:border-amber-800 p-2 rounded">
-                    Model Output
-                  </div>
-                </div>
+          <CardHeader className="pb-3">
+            <div className="flex items-center justify-between">
+              <div>
+                <CardTitle className="text-xl">Conversation History Explained</CardTitle>
+                <CardDescription>
+                  How history size of {historySize} affects token usage
+                </CardDescription>
               </div>
-
-              <div className="rounded-lg border p-4">
-                <h3 className="font-medium mb-2">2nd Interaction</h3>
-                <div className="space-y-2">
-                  <div className="bg-green-50 dark:bg-green-950 border border-green-200 dark:border-green-800 p-2 rounded">
-                    System Prompt
-                  </div>
-                  {historySize >= 1 && (
-                    <>
-                      <div className="bg-blue-50 dark:bg-blue-950 border border-blue-200 dark:border-blue-800 p-2 rounded opacity-70">
-                        Previous User Input (1)
-                      </div>
-                      <div className="bg-amber-50 dark:bg-amber-950 border border-amber-200 dark:border-amber-800 p-2 rounded opacity-70">
-                        Previous Model Output (1)
-                      </div>
-                    </>
-                  )}
-                  <div className="bg-blue-50 dark:bg-blue-950 border border-blue-200 dark:border-blue-800 p-2 rounded">
-                    Current User Input
-                  </div>
-                  <div className="bg-amber-50 dark:bg-amber-950 border border-amber-200 dark:border-amber-800 p-2 rounded">
-                    Model Output
-                  </div>
-                </div>
-              </div>
-
-              <div className="rounded-lg border p-4">
-                <h3 className="font-medium mb-2">3rd Interaction</h3>
-                <div className="space-y-2">
-                  <div className="bg-green-50 dark:bg-green-950 border border-green-200 dark:border-green-800 p-2 rounded">
-                    System Prompt
-                  </div>
-                  {historySize >= 2 && (
-                    <>
-                      <div className="bg-blue-50 dark:bg-blue-950 border border-blue-200 dark:border-blue-800 p-2 rounded opacity-50">
-                        Previous User Input (1)
-                      </div>
-                      <div className="bg-amber-50 dark:bg-amber-950 border border-amber-200 dark:border-amber-800 p-2 rounded opacity-50">
-                        Previous Model Output (1)
-                      </div>
-                    </>
-                  )}
-                  {historySize >= 1 && (
-                    <>
-                      <div className="bg-blue-50 dark:bg-blue-950 border border-blue-200 dark:border-blue-800 p-2 rounded opacity-70">
-                        Previous User Input (2)
-                      </div>
-                      <div className="bg-amber-50 dark:bg-amber-950 border border-amber-200 dark:border-amber-800 p-2 rounded opacity-70">
-                        Previous Model Output (2)
-                      </div>
-                    </>
-                  )}
-                  <div className="bg-blue-50 dark:bg-blue-950 border border-blue-200 dark:border-blue-800 p-2 rounded">
-                    Current User Input
-                  </div>
-                  <div className="bg-amber-50 dark:bg-amber-950 border border-amber-200 dark:border-amber-800 p-2 rounded">
-                    Model Output
-                  </div>
-                </div>
-              </div>
-
-              <div className="text-sm text-muted-foreground mt-2">
-                <p>
-                  With a history size of {historySize}, each request includes the system prompt, 
-                  up to {historySize} previous conversation turns, and the current user input. 
-                  This increases token usage but improves the model&apos;s context awareness.
-                </p>
-              </div>
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                className="h-8 w-8 p-0 cursor-pointer transition-transform duration-200 hover:bg-muted"
+                onClick={() => setIsHistoryExplanationOpen(!isHistoryExplanationOpen)}
+                aria-label={isHistoryExplanationOpen ? "Collapse explanation" : "Expand explanation"}
+              >
+                <ChevronDown 
+                  className={cn(
+                    "h-4 w-4 transition-transform duration-200",
+                    isHistoryExplanationOpen && "rotate-180"
+                  )} 
+                />
+              </Button>
             </div>
-          </CardContent>
+          </CardHeader>
+          <div className={cn(
+            "grid transition-all duration-300 ease-in-out",
+            isHistoryExplanationOpen ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"
+          )}>
+            <div className="overflow-hidden">
+              <CardContent className="pt-0">
+                <div className="space-y-4">
+                  <div className="rounded-lg border p-4">
+                    <h3 className="font-medium mb-2">1st Interaction</h3>
+                    <div className="space-y-2">
+                      <div className="bg-green-50 dark:bg-green-950 border border-green-200 dark:border-green-800 p-2 rounded">
+                        System Prompt
+                      </div>
+                      <div className="bg-blue-50 dark:bg-blue-950 border border-blue-200 dark:border-blue-800 p-2 rounded">
+                        User Input
+                      </div>
+                      <div className="bg-amber-50 dark:bg-amber-950 border border-amber-200 dark:border-amber-800 p-2 rounded">
+                        Model Output
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="rounded-lg border p-4">
+                    <h3 className="font-medium mb-2">2nd Interaction</h3>
+                    <div className="space-y-2">
+                      <div className="bg-green-50 dark:bg-green-950 border border-green-200 dark:border-green-800 p-2 rounded">
+                        System Prompt
+                      </div>
+                      {historySize >= 1 && (
+                        <>
+                          <div className="bg-blue-50 dark:bg-blue-950 border border-blue-200 dark:border-blue-800 p-2 rounded opacity-70">
+                            Previous User Input (1)
+                          </div>
+                          <div className="bg-amber-50 dark:bg-amber-950 border border-amber-200 dark:border-amber-800 p-2 rounded opacity-70">
+                            Previous Model Output (1)
+                          </div>
+                        </>
+                      )}
+                      <div className="bg-blue-50 dark:bg-blue-950 border border-blue-200 dark:border-blue-800 p-2 rounded">
+                        Current User Input
+                      </div>
+                      <div className="bg-amber-50 dark:bg-amber-950 border border-amber-200 dark:border-amber-800 p-2 rounded">
+                        Model Output
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="rounded-lg border p-4">
+                    <h3 className="font-medium mb-2">3rd Interaction</h3>
+                    <div className="space-y-2">
+                      <div className="bg-green-50 dark:bg-green-950 border border-green-200 dark:border-green-800 p-2 rounded">
+                        System Prompt
+                      </div>
+                      {historySize >= 2 && (
+                        <>
+                          <div className="bg-blue-50 dark:bg-blue-950 border border-blue-200 dark:border-blue-800 p-2 rounded opacity-50">
+                            Previous User Input (1)
+                          </div>
+                          <div className="bg-amber-50 dark:bg-amber-950 border border-amber-200 dark:border-amber-800 p-2 rounded opacity-50">
+                            Previous Model Output (1)
+                          </div>
+                        </>
+                      )}
+                      {historySize >= 1 && (
+                        <>
+                          <div className="bg-blue-50 dark:bg-blue-950 border border-blue-200 dark:border-blue-800 p-2 rounded opacity-70">
+                            Previous User Input (2)
+                          </div>
+                          <div className="bg-amber-50 dark:bg-amber-950 border border-amber-200 dark:border-amber-800 p-2 rounded opacity-70">
+                            Previous Model Output (2)
+                          </div>
+                        </>
+                      )}
+                      <div className="bg-blue-50 dark:bg-blue-950 border border-blue-200 dark:border-blue-800 p-2 rounded">
+                        Current User Input
+                      </div>
+                      <div className="bg-amber-50 dark:bg-amber-950 border border-amber-200 dark:border-amber-800 p-2 rounded">
+                        Model Output
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="text-sm text-muted-foreground mt-2">
+                    <p>
+                      With a history size of {historySize}, each request includes the system prompt, 
+                      up to {historySize} previous conversation turns, and the current user input. 
+                      This increases token usage but improves the model&apos;s context awareness.
+                    </p>
+                  </div>
+                </div>
+              </CardContent>
+            </div>
+          </div>
         </Card>
       )}
     </div>
