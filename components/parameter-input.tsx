@@ -4,6 +4,12 @@ import { useState, useEffect } from "react";
 import { Slider } from "@/components/ui/slider";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 interface ParameterInputProps {
   label: string;
@@ -67,20 +73,28 @@ export function ParameterInput({
   return (
     <div className="space-y-2">
       <div className="flex items-center justify-between">
-        <Label 
-          htmlFor={`param-${label.toLowerCase().replace(/\s+/g, '-')}`}
-          className="text-sm font-medium"
-        >
-          {label}
+        <div className="flex items-center">
+          <Label 
+            htmlFor={`param-${label.toLowerCase().replace(/\s+/g, '-')}`}
+            className="text-sm font-medium"
+          >
+            {label}
+          </Label>
           {tooltip && (
-            <span 
-              className="ml-1 cursor-help text-muted-foreground hover:text-foreground transition-colors" 
-              title={tooltip}
-            >
-              (?)
-            </span>
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <span className="ml-1 cursor-help text-muted-foreground hover:text-foreground transition-colors">
+                    (?)
+                  </span>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>{tooltip}</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
           )}
-        </Label>
+        </div>
         <Input
           id={`param-${label.toLowerCase().replace(/\s+/g, '-')}`}
           type="number"
