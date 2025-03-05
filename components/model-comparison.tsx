@@ -42,7 +42,7 @@ export function ModelComparison() {
                           alt={`${model.name} logo`}
                           width={20}
                           height={20}
-                          className="object-contain"
+                          className="object-contain dark:invert"
                         />
                       </div>
                     </div>
