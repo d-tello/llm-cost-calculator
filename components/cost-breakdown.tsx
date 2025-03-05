@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { CostBreakdown as CostBreakdownType } from "@/lib/types";
 import { models } from "@/lib/models";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Table,
   TableBody,

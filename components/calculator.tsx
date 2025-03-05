@@ -130,8 +130,8 @@ export function Calculator() {
                     value={params.sessionsPerMonth}
                     onChange={(value) => handleParamChange("sessionsPerMonth", value)}
                     min={1}
-                    max={1000}
-                    step={5}
+                    max={100000}
+                    step={100}
                     tooltip="Average number of sessions per user per month"
                   />
                   <ParameterInput
