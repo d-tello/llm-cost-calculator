@@ -11,6 +11,7 @@ export interface CalculatorParams {
   systemPromptWordCount: number;
   systemPromptTokenCount: number;
   historySize: number;
+  jsonOutputPercentage: number; // Percentage of outputs in JSON format (0-100)
   inputTokensPerInteraction: number;
   outputTokensPerInteraction: number;
   interactionsPerSession: number;

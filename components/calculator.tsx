@@ -15,6 +15,7 @@ const defaultParams: CalculatorParams = {
   systemPromptWordCount: 200,
   systemPromptTokenCount: 300,
   historySize: 3,
+  jsonOutputPercentage: 0,
   inputTokensPerInteraction: 500,
   outputTokensPerInteraction: 1000,
   interactionsPerSession: 5,
@@ -98,6 +99,15 @@ export function Calculator() {
                     max={10}
                     step={1}
                     tooltip="Number of previous conversation turns to include in each request (0 means no history)"
+                  />
+                  <ParameterInput
+                    label="JSON Output Percentage"
+                    value={params.jsonOutputPercentage}
+                    onChange={(value) => handleParamChange("jsonOutputPercentage", value)}
+                    min={0}
+                    max={100}
+                    step={5}
+                    tooltip="Percentage of outputs in JSON format vs LLM generated text (JSON uses fewer tokens)"
                   />
                   <ParameterInput
                     label="Input Tokens Per Interaction"
