@@ -8,15 +8,12 @@ export function calculateCost(params: CalculatorParams): CostBreakdown {
     throw new Error(`Model with ID ${params.modelId} not found`);
   }
   
-  // Calculate total input tokens
+  // System prompt tokens (constant for all interactions)
   const systemPromptTokens = params.systemPromptTokenCount;
-  const historyTokensPerInteraction = params.historySize;
-  const userInputTokensPerInteraction = params.inputTokensPerInteraction;
   
-  // For each interaction, we need:
-  // - System prompt (once per session)
-  // - History (grows with each interaction)
-  // - User input for that interaction
+  // User input and output tokens per interaction
+  const userInputTokensPerInteraction = params.inputTokensPerInteraction;
+  const outputTokensPerInteraction = params.outputTokensPerInteraction;
   
   let totalInputTokens = 0;
   let totalOutputTokens = 0;
@@ -25,20 +22,38 @@ export function calculateCost(params: CalculatorParams): CostBreakdown {
   for (let user = 0; user < params.totalUsers; user++) {
     // For each session this user has per month
     for (let session = 0; session < params.sessionsPerMonth; session++) {
-      // System prompt is sent once per session
-      totalInputTokens += systemPromptTokens;
-      
       // For each interaction in this session
       for (let interaction = 0; interaction < params.interactionsPerSession; interaction++) {
-        // History grows with each interaction (simplified model)
-        // In a real app, we might cap this or have a more complex model
-        const currentHistoryTokens = interaction > 0 ? historyTokensPerInteraction * interaction : 0;
+        // For the first interaction, we only send the system prompt + user input
+        if (interaction === 0) {
+          totalInputTokens += systemPromptTokens + userInputTokensPerInteraction;
+        } else {
+          // For subsequent interactions, we include:
+          // 1. System prompt (always included)
+          // 2. Previous messages (limited by history size)
+          // 3. Current user input
+          
+          // Calculate how many previous interactions to include based on history size
+          const historyToInclude = Math.min(interaction, params.historySize);
+          
+          // Start with system prompt + current user input
+          let inputTokensForThisInteraction = systemPromptTokens + userInputTokensPerInteraction;
+          
+          // Add tokens for previous messages (both user inputs and model outputs)
+          // For each previous interaction in the history window
+          for (let historyItem = 0; historyItem < historyToInclude; historyItem++) {
+            // Add tokens for a previous user input
+            inputTokensForThisInteraction += userInputTokensPerInteraction;
+            
+            // Add tokens for a previous model output
+            inputTokensForThisInteraction += outputTokensPerInteraction;
+          }
+          
+          totalInputTokens += inputTokensForThisInteraction;
+        }
         
-        // Input tokens for this interaction
-        totalInputTokens += currentHistoryTokens + userInputTokensPerInteraction;
-        
-        // Output tokens for this interaction
-        totalOutputTokens += params.outputTokensPerInteraction;
+        // Output tokens for this interaction (same for all interactions)
+        totalOutputTokens += outputTokensPerInteraction;
       }
     }
   }

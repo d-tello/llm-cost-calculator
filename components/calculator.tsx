@@ -3,9 +3,9 @@
 import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ModelSelector } from "./model-selector";
-import { ParameterInput } from "./parameter-input";
-import { CostBreakdown } from "./cost-breakdown";
+import { ModelSelector } from "@/components/model-selector";
+import { ParameterInput } from "@/components/parameter-input";
+import { CostBreakdown } from "@/components/cost-breakdown";
 import { ModelComparison } from "./model-comparison";
 import { calculateCost } from "@/lib/calculator";
 import { CalculatorParams, CostBreakdown as CostBreakdownType } from "@/lib/types";
@@ -14,7 +14,7 @@ const defaultParams: CalculatorParams = {
   modelId: "claude-3-5-sonnet",
   systemPromptWordCount: 200,
   systemPromptTokenCount: 300,
-  historySize: 1000,
+  historySize: 3,
   inputTokensPerInteraction: 500,
   outputTokensPerInteraction: 1000,
   interactionsPerSession: 5,
@@ -25,7 +25,7 @@ const defaultParams: CalculatorParams = {
 export function Calculator() {
   const [params, setParams] = useState<CalculatorParams>(defaultParams);
   const [costBreakdown, setCostBreakdown] = useState<CostBreakdownType | null>(null);
-  const [activeTab, setActiveTab] = useState("calculator");
+  const [activeTab, setActiveTab] = useState("monthly");
 
   // Calculate cost whenever params change
   useEffect(() => {
@@ -60,11 +60,11 @@ export function Calculator() {
 
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
         <TabsList className="grid w-full grid-cols-2">
-          <TabsTrigger value="calculator" className="cursor-pointer">Calculator</TabsTrigger>
-          <TabsTrigger value="comparison" className="cursor-pointer">Model Comparison</TabsTrigger>
+          <TabsTrigger value="monthly" className="cursor-pointer">Monthly</TabsTrigger>
+          <TabsTrigger value="yearly" className="cursor-pointer">Yearly</TabsTrigger>
         </TabsList>
         
-        <TabsContent value="calculator" className="mt-6">
+        <TabsContent value="monthly" className="mt-6">
           <div className="grid gap-6 md:grid-cols-2">
             <div className="space-y-6">
               <Card>
@@ -94,13 +94,13 @@ export function Calculator() {
                     tooltip="Approximate number of words in your system prompt"
                   />
                   <ParameterInput
-                    label="History Size (tokens)"
+                    label="History Size"
                     value={params.historySize}
                     onChange={(value) => handleParamChange("historySize", value)}
                     min={0}
-                    max={10000}
-                    step={100}
-                    tooltip="Average number of tokens in conversation history per interaction"
+                    max={10}
+                    step={1}
+                    tooltip="Number of previous conversation turns to include in each request (0 means no history)"
                   />
                   <ParameterInput
                     label="Input Tokens Per Interaction"
@@ -155,13 +155,14 @@ export function Calculator() {
                 <CostBreakdown
                   modelId={params.modelId}
                   breakdown={costBreakdown}
+                  historySize={params.historySize}
                 />
               )}
             </div>
           </div>
         </TabsContent>
         
-        <TabsContent value="comparison" className="mt-6">
+        <TabsContent value="yearly" className="mt-6">
           <Card>
             <CardHeader>
               <CardTitle>Model Pricing Comparison</CardTitle>
