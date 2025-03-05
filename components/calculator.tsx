@@ -53,7 +53,7 @@ export function Calculator() {
   }, [params.systemPromptWordCount]);
 
   return (
-    <div className="container mx-auto max-w-5xl px-4 py-8">
+    <div className="container mx-auto max-w-6xl px-4 py-8">
   
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
         <TabsList className="grid w-full grid-cols-2">
@@ -62,8 +62,8 @@ export function Calculator() {
         </TabsList>
         
         <TabsContent value="monthly" className="mt-6">
-          <div className="grid gap-6 md:grid-cols-2">
-            <div className="space-y-6">
+          <div className="grid gap-6 md:grid-cols-5">
+            <div className="space-y-6 md:col-span-2">
               <Card>
                 <CardHeader>
                   <CardTitle>Model Selection</CardTitle>
@@ -147,12 +147,13 @@ export function Calculator() {
               </Card>
             </div>
 
-            <div>
+            <div className="md:col-span-3">
               {costBreakdown && (
                 <CostBreakdown
                   modelId={params.modelId}
                   breakdown={costBreakdown}
                   historySize={params.historySize}
+                  totalUsers={params.totalUsers}
                 />
               )}
             </div>

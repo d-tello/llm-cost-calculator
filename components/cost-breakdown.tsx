@@ -20,9 +20,10 @@ interface CostBreakdownProps {
   modelId: string;
   breakdown: CostBreakdownType;
   historySize: number;
+  totalUsers?: number;
 }
 
-export function CostBreakdown({ modelId, breakdown, historySize }: CostBreakdownProps) {
+export function CostBreakdown({ modelId, breakdown, historySize, totalUsers = 1 }: CostBreakdownProps) {
   const [isHistoryExplanationOpen, setIsHistoryExplanationOpen] = useState(false);
   const model = models.find((m) => m.id === modelId);
 
@@ -52,6 +53,8 @@ export function CostBreakdown({ modelId, breakdown, historySize }: CostBreakdown
     }
   };
 
+  const costPerUser = totalUsers > 0 ? breakdown.totalCost / totalUsers : 0;
+
   return (
     <div className="space-y-6">
       <Card className="w-full">
@@ -59,33 +62,39 @@ export function CostBreakdown({ modelId, breakdown, historySize }: CostBreakdown
           <CardTitle className="text-xl">Monthly Cost Breakdown</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="mb-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
-            <div className="rounded-lg bg-muted p-4">
+          <div className="mb-6 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="rounded-lg bg-muted p-3">
               <div className="text-sm text-muted-foreground">Total Cost</div>
-              <div className="text-2xl font-bold">
+              <div className="text-xl font-bold truncate">
                 {formatCurrency(breakdown.totalCost)}
               </div>
             </div>
-            <div className="rounded-lg bg-muted p-4">
+            <div className="rounded-lg bg-muted p-3">
+              <div className="text-sm text-muted-foreground">Cost Per User</div>
+              <div className="text-xl font-bold truncate">
+                {formatCurrency(costPerUser)}
+              </div>
+            </div>
+            <div className="rounded-lg bg-muted p-3">
               <div className="text-sm text-muted-foreground">Input Tokens</div>
-              <div className="text-2xl font-bold">
+              <div className="text-xl font-bold truncate">
                 {formatNumber(breakdown.totalTokens.input)}
               </div>
             </div>
-            <div className="rounded-lg bg-muted p-4">
+            <div className="rounded-lg bg-muted p-3">
               <div className="text-sm text-muted-foreground">Output Tokens</div>
-              <div className="text-2xl font-bold">
+              <div className="text-xl font-bold truncate">
                 {formatNumber(breakdown.totalTokens.output)}
               </div>
             </div>
           </div>
 
-          <Table>
+          <Table className="w-full">
             <TableHeader>
               <TableRow>
-                <TableHead>Category</TableHead>
-                <TableHead>Tokens</TableHead>
-                <TableHead className="text-right">Cost</TableHead>
+                <TableHead className="w-[40%]">Category</TableHead>
+                <TableHead className="w-[30%]">Tokens</TableHead>
+                <TableHead className="w-[30%] text-right">Cost</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
