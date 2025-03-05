@@ -141,9 +141,6 @@ export function CostBreakdown({ modelId, breakdown, historySize, totalUsers = 1 
             <div className="flex items-center justify-between">
               <div>
                 <CardTitle className="text-xl">Conversation History Explained</CardTitle>
-                <CardDescription>
-                  How history size of {historySize} affects token usage
-                </CardDescription>
               </div>
               <Button 
                 variant="ghost" 
