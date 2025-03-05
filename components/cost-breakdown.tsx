@@ -171,13 +171,13 @@ export function CostBreakdown({ modelId, breakdown, historySize, totalUsers = 1 
                   <div className="rounded-lg border p-4">
                     <h3 className="font-medium mb-2">1st Interaction</h3>
                     <div className="space-y-2">
-                      <div className="bg-green-50 dark:bg-green-950 border border-green-200 dark:border-green-800 p-2 rounded">
+                      <div className="bg-green-50 dark:bg-slate-800 border border-green-200 dark:border-slate-700 p-2 rounded">
                         System Prompt
                       </div>
-                      <div className="bg-blue-50 dark:bg-blue-950 border border-blue-200 dark:border-blue-800 p-2 rounded">
+                      <div className="bg-blue-50 dark:bg-indigo-950/40 border border-blue-200 dark:border-indigo-900 p-2 rounded">
                         User Input
                       </div>
-                      <div className="bg-amber-50 dark:bg-amber-950 border border-amber-200 dark:border-amber-800 p-2 rounded">
+                      <div className="bg-amber-50 dark:bg-purple-950/40 border border-amber-200 dark:border-purple-900 p-2 rounded">
                         Model Output
                       </div>
                     </div>
@@ -186,23 +186,23 @@ export function CostBreakdown({ modelId, breakdown, historySize, totalUsers = 1 
                   <div className="rounded-lg border p-4">
                     <h3 className="font-medium mb-2">2nd Interaction</h3>
                     <div className="space-y-2">
-                      <div className="bg-green-50 dark:bg-green-950 border border-green-200 dark:border-green-800 p-2 rounded">
+                      <div className="bg-green-50 dark:bg-slate-800 border border-green-200 dark:border-slate-700 p-2 rounded">
                         System Prompt
                       </div>
                       {historySize >= 1 && (
                         <>
-                          <div className="bg-blue-50 dark:bg-blue-950 border border-blue-200 dark:border-blue-800 p-2 rounded opacity-70">
+                          <div className="bg-blue-50 dark:bg-indigo-950/40 border border-blue-200 dark:border-indigo-900 p-2 rounded opacity-70">
                             Previous User Input (1)
                           </div>
-                          <div className="bg-amber-50 dark:bg-amber-950 border border-amber-200 dark:border-amber-800 p-2 rounded opacity-70">
+                          <div className="bg-amber-50 dark:bg-purple-950/40 border border-amber-200 dark:border-purple-900 p-2 rounded opacity-70">
                             Previous Model Output (1)
                           </div>
                         </>
                       )}
-                      <div className="bg-blue-50 dark:bg-blue-950 border border-blue-200 dark:border-blue-800 p-2 rounded">
+                      <div className="bg-blue-50 dark:bg-indigo-950/40 border border-blue-200 dark:border-indigo-900 p-2 rounded">
                         Current User Input
                       </div>
-                      <div className="bg-amber-50 dark:bg-amber-950 border border-amber-200 dark:border-amber-800 p-2 rounded">
+                      <div className="bg-amber-50 dark:bg-purple-950/40 border border-amber-200 dark:border-purple-900 p-2 rounded">
                         Model Output
                       </div>
                     </div>
@@ -211,33 +211,33 @@ export function CostBreakdown({ modelId, breakdown, historySize, totalUsers = 1 
                   <div className="rounded-lg border p-4">
                     <h3 className="font-medium mb-2">3rd Interaction</h3>
                     <div className="space-y-2">
-                      <div className="bg-green-50 dark:bg-green-950 border border-green-200 dark:border-green-800 p-2 rounded">
+                      <div className="bg-green-50 dark:bg-slate-800 border border-green-200 dark:border-slate-700 p-2 rounded">
                         System Prompt
                       </div>
                       {historySize >= 2 && (
                         <>
-                          <div className="bg-blue-50 dark:bg-blue-950 border border-blue-200 dark:border-blue-800 p-2 rounded opacity-50">
+                          <div className="bg-blue-50 dark:bg-indigo-950/40 border border-blue-200 dark:border-indigo-900 p-2 rounded opacity-50">
                             Previous User Input (1)
                           </div>
-                          <div className="bg-amber-50 dark:bg-amber-950 border border-amber-200 dark:border-amber-800 p-2 rounded opacity-50">
+                          <div className="bg-amber-50 dark:bg-purple-950/40 border border-amber-200 dark:border-purple-900 p-2 rounded opacity-50">
                             Previous Model Output (1)
                           </div>
                         </>
                       )}
                       {historySize >= 1 && (
                         <>
-                          <div className="bg-blue-50 dark:bg-blue-950 border border-blue-200 dark:border-blue-800 p-2 rounded opacity-70">
+                          <div className="bg-blue-50 dark:bg-indigo-950/40 border border-blue-200 dark:border-indigo-900 p-2 rounded opacity-70">
                             Previous User Input (2)
                           </div>
-                          <div className="bg-amber-50 dark:bg-amber-950 border border-amber-200 dark:border-amber-800 p-2 rounded opacity-70">
+                          <div className="bg-amber-50 dark:bg-purple-950/40 border border-amber-200 dark:border-purple-900 p-2 rounded opacity-70">
                             Previous Model Output (2)
                           </div>
                         </>
                       )}
-                      <div className="bg-blue-50 dark:bg-blue-950 border border-blue-200 dark:border-blue-800 p-2 rounded">
+                      <div className="bg-blue-50 dark:bg-indigo-950/40 border border-blue-200 dark:border-indigo-900 p-2 rounded">
                         Current User Input
                       </div>
-                      <div className="bg-amber-50 dark:bg-amber-950 border border-amber-200 dark:border-amber-800 p-2 rounded">
+                      <div className="bg-amber-50 dark:bg-purple-950/40 border border-amber-200 dark:border-purple-900 p-2 rounded">
                         Model Output
                       </div>
                     </div>
