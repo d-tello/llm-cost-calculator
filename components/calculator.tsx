@@ -54,10 +54,7 @@ export function Calculator() {
 
   return (
     <div className="container mx-auto max-w-5xl px-4 py-8">
-      <h1 className="mb-8 text-center text-3xl font-bold">
-        AWS Bedrock LLM Cost Calculator
-      </h1>
-
+  
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
         <TabsList className="grid w-full grid-cols-2">
           <TabsTrigger value="monthly" className="cursor-pointer">Monthly</TabsTrigger>
