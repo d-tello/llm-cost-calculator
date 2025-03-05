@@ -60,8 +60,8 @@ export function Calculator() {
 
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
         <TabsList className="grid w-full grid-cols-2">
-          <TabsTrigger value="calculator">Calculator</TabsTrigger>
-          <TabsTrigger value="comparison">Model Comparison</TabsTrigger>
+          <TabsTrigger value="calculator" className="cursor-pointer">Calculator</TabsTrigger>
+          <TabsTrigger value="comparison" className="cursor-pointer">Model Comparison</TabsTrigger>
         </TabsList>
         
         <TabsContent value="calculator" className="mt-6">

@@ -74,10 +74,10 @@ export function ParameterInput({
           {label}
           {tooltip && (
             <span 
-              className="ml-1 cursor-help text-muted-foreground" 
+              className="ml-1 cursor-help text-muted-foreground hover:text-foreground transition-colors" 
               title={tooltip}
             >
-              ℹ️
+              (?)
             </span>
           )}
         </Label>
