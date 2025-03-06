@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Slider } from "@/components/ui/slider";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -31,6 +31,7 @@ export function ParameterInput({
   tooltip,
 }: ParameterInputProps) {
   const [inputValue, setInputValue] = useState<string>(value.toString());
+  const [tooltipOpen, setTooltipOpen] = useState(false);
 
   // Update the input value when the prop value changes
   useEffect(() => {
@@ -45,7 +46,7 @@ export function ParameterInput({
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value;
     setInputValue(newValue);
-    
+
     // Only update the actual value if it's a valid number
     const numValue = parseFloat(newValue);
     if (!isNaN(numValue) && numValue >= min && numValue <= max) {
@@ -70,25 +71,46 @@ export function ParameterInput({
     }
   };
 
+  // Improved tooltip toggle handler with explicit prevention of default behavior
+  const handleTooltipClick = useCallback((e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setTooltipOpen((prev) => !prev);
+  }, []);
+
+  // Separate handler for touch events
+  const handleTooltipTouch = useCallback((e: React.TouchEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setTooltipOpen((prev) => !prev);
+  }, []);
+
   return (
     <div className="space-y-2">
       <div className="flex items-center justify-between">
         <div className="flex items-center">
-          <Label 
-            htmlFor={`param-${label.toLowerCase().replace(/\s+/g, '-')}`}
+          <Label
+            htmlFor={`param-${label.toLowerCase().replace(/\s+/g, "-")}`}
             className="text-sm font-medium"
           >
             {label}
           </Label>
           {tooltip && (
             <TooltipProvider>
-              <Tooltip>
+              <Tooltip open={tooltipOpen} onOpenChange={setTooltipOpen}>
                 <TooltipTrigger asChild>
-                  <span className="ml-1 cursor-help text-muted-foreground hover:text-foreground transition-colors">
-                    (?)
+                  <span
+                    className="ml-1 cursor-pointer text-muted-foreground hover:text-foreground transition-colors rounded-full w-4 h-4 inline-flex items-center justify-center border border-muted-foreground/30 text-xs"
+                    role="button"
+                    tabIndex={0}
+                    aria-label="Show information"
+                    onClick={handleTooltipClick}
+                    onTouchEnd={handleTooltipTouch}
+                  >
+                    ?
                   </span>
                 </TooltipTrigger>
-                <TooltipContent>
+                <TooltipContent sideOffset={5}>
                   <p>{tooltip}</p>
                 </TooltipContent>
               </Tooltip>
@@ -96,7 +118,7 @@ export function ParameterInput({
           )}
         </div>
         <Input
-          id={`param-${label.toLowerCase().replace(/\s+/g, '-')}`}
+          id={`param-${label.toLowerCase().replace(/\s+/g, "-")}`}
           type="number"
           value={inputValue}
           onChange={handleInputChange}
@@ -117,4 +139,4 @@ export function ParameterInput({
       />
     </div>
   );
-} 
+}
